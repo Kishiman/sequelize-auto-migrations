@@ -90,9 +90,9 @@ async function executeSql(queryInterface, sql) {
 
 (async () => {
   let createIfNot = await executeSql(queryInterface,
-    'CREATE TABLE IF NOT EXISTS "SequelizeMeta" (name varchar UNIQUE)'
-    );
-  let res = await executeSql(queryInterface, 'select * from "SequelizeMeta"');
+    'CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` varchar(50) UNIQUE)'
+  );
+  let res = await executeSql(queryInterface, 'select * from `SequelizeMeta`');
   let ranMigrations = res.map(r => r.name);
   migrationFiles = migrationFiles.filter(mf => {
     return (!ranMigrations.includes(mf));
@@ -103,7 +103,7 @@ async function executeSql(queryInterface, sql) {
 
   for (let file of migrationFiles) {
     await migrate.executeMigration(queryInterface, path.join(migrationsDir, file), fromPos);
-    await executeSql(queryInterface, `INSERT INTO "SequelizeMeta" ("name") VALUES ('${file}')`);
+    await executeSql(queryInterface, "INSERT INTO `SequelizeMeta` (`name`) VALUES ('" + file + "')");
     fromPos = 0;
   }
 
