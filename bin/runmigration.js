@@ -93,8 +93,8 @@ async function executeSql(queryInterface, sql) {
   //   'CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` varchar(50) UNIQUE)'
   // );
   const sequelize = queryInterface.sequelize
-  queryInterface.queryGenerator = new sequelize.dialect.QueryGenerator({ sequelize, _dialect: sequelize.getDialect() })
-  const SequelizeMeta = sequelize.define("SequelizeMeta", { name: { type: DataTypes.STRING(50), primaryKey: true } }, { timestamps: false, paranoid: false })
+  queryInterface.queryGenerator = new sequelize.dialect.QueryGenerator({ sequelize, _dialect: sequelize.dialect })
+  const SequelizeMeta = sequelize.define("SequelizeMeta", { name: { type: sequelize.Sequelize.DataTypes.STRING(50), primaryKey: true } }, { timestamps: false, paranoid: false })
   let createIfNot = await SequelizeMeta.sync()
   // let res = await executeSql(queryInterface, 'select * from `SequelizeMeta`');
   let res = await SequelizeMeta.findAll({ raw: true })
@@ -110,7 +110,7 @@ async function executeSql(queryInterface, sql) {
   for (let file of migrationFiles) {
     await migrate.executeMigration(queryInterface, path.join(migrationsDir, file), fromPos);
     // await executeSql(queryInterface, "INSERT INTO `SequelizeMeta` (`name`) VALUES ('" + file + "')");
-    await SequelizeMeta.create({ name: '"' + file + '"' })
+    await SequelizeMeta.create({ name: '' + file + '' })
     fromPos = 0;
   }
 
