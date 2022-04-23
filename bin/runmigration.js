@@ -93,7 +93,7 @@ async function executeSql(queryInterface, sql) {
   //   'CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` varchar(50) UNIQUE)'
   // );
   const sequelize = queryInterface.sequelize
-  queryInterface.queryGenerator = new sequelize.dialect.QueryGenerator({ sequelize, _dialect: sequelize.dialect })
+  queryInterface.queryGenerator = queryInterface.queryGenerator || new sequelize.dialect.QueryGenerator({ sequelize, _dialect: sequelize.dialect })
   const SequelizeMeta = sequelize.define("SequelizeMeta", { name: { type: sequelize.Sequelize.DataTypes.STRING(50), primaryKey: true } }, { timestamps: false, paranoid: false })
   let createIfNot = await SequelizeMeta.sync()
   // let res = await executeSql(queryInterface, 'select * from `SequelizeMeta`');
